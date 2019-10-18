@@ -256,6 +256,7 @@ void opcontrol() {
   right_wheels.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
   left_wheels_2.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
   right_wheels_2.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+  IntegratedEncoder drive = IntegratedEncoder(left_wheels);
   while (true) {
      //DRIVE (TANK)
      float left=(master.get_analog(ANALOG_LEFT_Y));
@@ -272,17 +273,17 @@ void opcontrol() {
      left_wheels.move(-left);
      right_wheels.move(right);
      left_wheels_2.move(left);
-     right_wheels_2.move(-right);
+     right_wheels_2.move(right);
      left_motor_movement_log.push_back(left);
      right_motor_movement_log.push_back(right);
      //printf("%d %d",master.get_analog(ANALOG_LEFT_Y),master.get_analog(ANALOG_RIGHT_Y));
-    //DRIVE (ARCADE)
+     //DRIVE (ARCADE)
      /*int power = master.get_analog(ANALOG_LEFT_Y);
      int turn = master.get_analog(ANALOG_RIGHT_X);
-     int left = (power + turn)*SPEED_COEFFICIENT;
-     int right = (power - turn)*SPEED_COEFFICIENT;
-     right *= -1; // This reverses the right motor
-     left_wheels.move(left);
+     int left = (power + turn);
+     int right = (power - turn);
+     printf("%f\n",drive.get());
+     left_wheels.move(-left);
      right_wheels.move(right);
      left_wheels_2.move(left);
      right_wheels_2.move(right);
@@ -305,7 +306,7 @@ void opcontrol() {
      }
      else if(moveLiftDown){
        moveLiftDown=lift_macro_down(encL);
-     }*/);
+     }*/
     if (master.get_digital(DIGITAL_L1)) {
       move_lift(true);
     }
@@ -313,7 +314,7 @@ void opcontrol() {
       move_lift(false);
     }
     else{
-      stop_lift
+      stop_lift();
     }
     //INTAKE CONTROL
     if (master.get_digital(DIGITAL_R1)) {
