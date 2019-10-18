@@ -252,10 +252,7 @@ void opcontrol() {
   outtake.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
   intake_R.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
   intake_L.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-  left_wheels.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-  right_wheels.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-  left_wheels_2.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-  right_wheels_2.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+  lift.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
   IntegratedEncoder drive = IntegratedEncoder(left_wheels);
   while (true) {
      //DRIVE (TANK)
