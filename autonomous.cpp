@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "okapi/api.hpp"
 bool red = true;
+bool risky = false;
 using namespace okapi;
 #define tpi 8.8188038732
 #define tpdeg 0.82
@@ -132,38 +133,61 @@ void autonomous(){
     lift(false);
     aintake_L.move(127);
     aintake_R.move(-127);
-    driveForward(50);
-    pros::delay(200);
-    if(red){
-      turn(36);
-    }
-    else{
-      rturn(-36);
-    }
-    driveBackward(-55);
-    pros::delay(200);
-    if(red){
-      rturn(-36);
-    }
-    else{
-      turn(36);
-    }
-    driveForward(50);
-    pros::delay(200);
-    driveBackward(-40);
-    pros::delay(200);
-    if(red){
-      rturn(-130);
-    }
-    else {
-      turn(130);
-    }
-    aintake_L.move(30);
-    aintake_R.move(-30);
-    driveForward(10);
-    pros::delay(100);
+    if(risky){
+      driveForward(50);
+      pros::delay(200);
+      if(red){
+        turn(36);
+      }
+      else{
+        rturn(-36);
+      }
+      driveBackward(-55);
+      pros::delay(200);
+      if(red){
+        rturn(-36);
+      }
+      else{
+        turn(36);
+      }
+      driveForward(50);
+      pros::delay(200);
+      driveBackward(-40);
+      pros::delay(200);
+      if(red){
+        rturn(-130);
+      }
+      else {
+        turn(130);
+      }
+      aintake_L.move(30);
+      aintake_R.move(-30);
+      driveForward(10);
+      pros::delay(100);
 
-    aintake_L.move(-30);
-    aintake_R.move(30);
-    aouttake_macro(false);
+      aintake_L.move(-30);
+      aintake_R.move(30);
+      aouttake_macro(false);
+    }
+    else{
+      driveForward(50);
+      pros::delay(200);
+      driveBackward(-52);
+      pros::delay(200);
+      driveForward(5);
+      if(red){
+        turn(90);
+      }
+      else{
+        rturn(-90);
+      }
+      aintake_L.move(30);
+      aintake_R.move(-30);
+      moveForward(24);
+      pros::delay(100);
+      aintake_L.move(-30);
+      aintake_R.move(30);
+      aouttake_macro(false);
+      moveBackward(10);
+    }
 }
