@@ -181,7 +181,7 @@ bool outtake_macro(bool dir,IntegratedEncoder enc){//false for reverse
   if(!dir){
     if(enc.get()>=-OUTTAKE_ENCODER_TICKS){
       if(master.get_digital(DIGITAL_Y))return false;
-      if(enc.get()>5000){
+      if(enc.get()<-5000){
         outtake.move(-85);
       }
       else{
@@ -346,13 +346,13 @@ void opcontrol() {
       stopOuttake();
     }
     if(master.get_digital(DIGITAL_X)){
-      OUTTAKE_ENCODER_TICKS=6100;
+      OUTTAKE_ENCODER_TICKS=6200;
       dir=true;
       keep=outtake_macro(dir,enc);
       //moveOuttake(true);//controlled outtake
     }
     else if(master.get_digital(DIGITAL_UP)){
-      OUTTAKE_ENCODER_TICKS=6100;
+      OUTTAKE_ENCODER_TICKS=6200;
       dir = false;
       keep=outtake_macro(dir,enc);
       //moveOuttake(false);
