@@ -48,6 +48,7 @@ int LIFT_SPEED=126;
 pros::Vision vis (VISION_PORT);
 
 
+pros::Controller master (CONTROLLER_MASTER);
 pros::vision_signature_s_t THANOSCUBE = pros::Vision::signature_from_utility(1, 1379, 2243, 1811, 8235, 9945, 9090, 3.000, 1);
 pros::vision_signature_s_t ORANGCUBE = pros::Vision::signature_from_utility(2, 6253, 6967, 6610, -2621, -2185, -2403, 3.000, 0);
 pros::vision_signature_s_t GREENCUBES = pros::Vision::signature_from_utility(3, -8371, -7575, -7973, -4897, -3719, -4308, 3.000, 0);
@@ -131,8 +132,8 @@ void moveIntake(bool dir){//false for reverse
     intake_motor_movement_log.push_back(INTAKE_SPEED);
   }
   else{
-    intake_L.move(-127);
-    intake_R.move(127);
+    intake_L.move(-80);
+    intake_R.move(80);
     intake_motor_movement_log.push_back(-INTAKE_SPEED);
   }
 }
@@ -176,23 +177,31 @@ void outtake_macro(bool state,long encStart){//false for reverse
     }
   }
 }
-void outtake_macro(bool dir){//false for reverse
-  IntegratedEncoder enc = IntegratedEncoder(outtake);
-  enc.reset();
-  if(dir){
-    while(enc.get()<=OUTTAKE_ENCODER_TICKS){
-      outtake.move(OUTTAKE_SPEED);
-      outtake_motor_movement_log.push_back(OUTTAKE_SPEED);
+bool outtake_macro(bool dir,IntegratedEncoder enc){//false for reverse
+  if(!dir){
+    if(enc.get()>=-OUTTAKE_ENCODER_TICKS){
+      if(master.get_digital(DIGITAL_Y))return false;
+      if(enc.get()>5000){
+        outtake.move(-85);
+      }
+      outtake.move(-OUTTAKE_SPEED);
+      printf("%f\n",enc.get());
+      return true;
+    }
+    else{
+      return false;
     }
   }
   else{
-    while(enc.get()>=-OUTTAKE_ENCODER_TICKS){
-      outtake.move(-OUTTAKE_SPEED);
-      outtake_motor_movement_log.push_back(-OUTTAKE_SPEED);
+    if(enc.get()<=0){
+      if(master.get_digital(DIGITAL_Y))return false;
+      outtake.move(OUTTAKE_SPEED);
+      return true;
+    }
+    else{
+      return false;
     }
   }
-  outtake.move(0);
-  outtake_motor_movement_log.push_back(-OUTTAKE_SPEED);
 }
 void move_lift(bool dir){
   if(dir){
@@ -247,13 +256,14 @@ void opcontrol() {
   vis.set_signature(3, &ORANGCUBE);
   int tick = 0;
   enc.reset();
-  pros::Controller master (CONTROLLER_MASTER);
 
   outtake.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
   intake_R.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
   intake_L.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
   lift.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
   IntegratedEncoder drive = IntegratedEncoder(left_wheels);
+  bool keep =false;
+  bool dir = false;
   while (true) {
      //DRIVE (TANK)
      float left=(master.get_analog(ANALOG_LEFT_Y));
@@ -325,28 +335,37 @@ void opcontrol() {
       stopIntake();
     }
     //OUTTAKE SYSTEM
+    printf("%d\n",keep);
+    if(keep){
+      keep=outtake_macro(dir,enc);
+
+    }
+    else{
+      stopOuttake();
+    }
     if(master.get_digital(DIGITAL_X)){
-      OUTTAKE_ENCODER_TICKS=12000;
-      outtake_macro(true);
+      OUTTAKE_ENCODER_TICKS=6100;
+      dir=true;
+      keep=outtake_macro(dir,enc);
       //moveOuttake(true);//controlled outtake
     }
     else if(master.get_digital(DIGITAL_UP)){
-      OUTTAKE_ENCODER_TICKS=12000;
-      outtake_macro(false);
+      OUTTAKE_ENCODER_TICKS=6100;
+      dir = false;
+      keep=outtake_macro(dir,enc);
       //moveOuttake(false);
     }
     else if(master.get_digital(DIGITAL_B)){
-    OUTTAKE_ENCODER_TICKS=3600;
-      outtake_macro(true);
+    OUTTAKE_ENCODER_TICKS=1800;
+    dir = true;
+    keep=outtake_macro(dir,enc);
       //moveOuttake(true);//controlled outtake
     }
     else if(master.get_digital(DIGITAL_DOWN)){
-    OUTTAKE_ENCODER_TICKS=3600;
-      outtake_macro(false);
+    OUTTAKE_ENCODER_TICKS=1800;
+    dir = false;
+    keep=outtake_macro(dir,enc);
       //moveOuttake(false);
-    }
-    else{
-     stopOuttake();
     }
     pros::delay(10);
   }
