@@ -184,7 +184,9 @@ bool outtake_macro(bool dir,IntegratedEncoder enc){//false for reverse
       if(enc.get()>5000){
         outtake.move(-85);
       }
-      outtake.move(-OUTTAKE_SPEED);
+      else{
+        outtake.move(-OUTTAKE_SPEED);
+      }
       printf("%f\n",enc.get());
       return true;
     }
