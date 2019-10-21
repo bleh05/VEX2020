@@ -181,7 +181,7 @@ bool outtake_macro(bool dir,IntegratedEncoder enc){//false for reverse
   if(!dir){
     if(enc.get()>=-OUTTAKE_ENCODER_TICKS){
       if(master.get_digital(DIGITAL_Y))return false;
-      if(enc.get()<-5000){
+      if(enc.get()<-4500){
         outtake.move(-85);
       }
       else{
