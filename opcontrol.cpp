@@ -18,7 +18,7 @@ using namespace okapi;
 bool profiling = false;
 
 //ports/encoders
-pros::Motor left_wheels (LEFT_WHEELS_PORT);
+pros::Motor left_wheels (LEFT_WHEELS_PORT,true);
 pros::Motor left_wheels_2 (LEFT_WHEELS_PORT_2,true);
 pros::Motor right_wheels (RIGHT_WHEELS_PORT, true);
 pros::Motor right_wheels_2 (RIGHT_WHEELS_PORT_2);
@@ -54,20 +54,6 @@ pros::vision_signature_s_t ORANGCUBE = pros::Vision::signature_from_utility(2, 6
 pros::vision_signature_s_t GREENCUBES = pros::Vision::signature_from_utility(3, -8371, -7575, -7973, -4897, -3719, -4308, 3.000, 0);
 pros::vision_signature_s_t PURPLE = pros::Vision::signature_from_utility( 4, 895, 1927, 1411, 8041, 10169, 9105, 3.000, 1);
 //motion profiling variables??
-auto myChassis = ChassisControllerFactory::create(
-  {1, -2}, // Left motors
-  {-10, 9},   // Right motors
-  AbstractMotor::gearset::red, // Torque gearset
-  {4_in, 12.5_in} // 4 inch wheels, 12.5 inch wheelbase width
-);
-
-auto profileController = AsyncControllerFactory::motionProfile(
-  2.0,  // Maximum linear velocity of the Chassis in m/s
-  2.0,  // Maximum linear acceleration of the Chassis in m/s/s
-  10.0, // Maximum linear jerk of the Chassis in m/s/s/s
-  myChassis // Chassis Controller
-);
-
 int autoAlignCube(){
   pros::vision_object_s_t purp = vis.get_by_sig(0, 1);
   pros::vision_object_s_t green = vis.get_by_sig(0, 2);
@@ -358,13 +344,13 @@ void opcontrol() {
       //moveOuttake(false);
     }
     else if(master.get_digital(DIGITAL_B)){
-    OUTTAKE_ENCODER_TICKS=1800;
+    OUTTAKE_ENCODER_TICKS=1820;
     dir = true;
     keep=outtake_macro(dir,enc);
       //moveOuttake(true);//controlled outtake
     }
     else if(master.get_digital(DIGITAL_DOWN)){
-    OUTTAKE_ENCODER_TICKS=1800;
+    OUTTAKE_ENCODER_TICKS=1820;
     dir = false;
     keep=outtake_macro(dir,enc);
       //moveOuttake(false);
