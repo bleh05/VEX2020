@@ -171,8 +171,8 @@ void autonomous(){
       driveBackward(-60);
       driveForward(7);
       rturn(-67);
-      aintake_L.move(-35);
-      aintake_R.move(35);
+      aintake_L.move(35);
+      aintake_R.move(-35);
       driveForward(12);
       aintake_L.move(0);
       aintake_R.move(0);
