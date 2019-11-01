@@ -171,13 +171,17 @@ void autonomous(){
       driveBackward(-60);
       driveForward(7);
       rturn(-67);
+      aintake_L.move(-35);
+      aintake_R.move(35);
       driveForward(9);
-      aintake_L.move(-25);
-      aintake_R.move(25);
+      aintake_L.move(0);
+      aintake_R.move(0);
       bool keep = aouttake_macro(false,IntegratedEncoder(aouttake));
       while (keep){
         keep = aouttake_macro(false,IntegratedEncoder(aouttake));
       }
+      aintake_L.move(-25);
+      aintake_R.move(25);
       driveBackward(-5);
       keep = aouttake_macro(true,IntegratedEncoder(aouttake));
       while (keep){
