@@ -165,7 +165,7 @@ void autonomous(){
       pros::delay(200);
       turn(27);
       driveBackward(-60);
-      driveBackward(-6);
+      driveBackward(-3);
       driveForward(58);
       pros::delay(400);
       driveBackward(-60);
