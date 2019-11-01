@@ -163,7 +163,7 @@ void autonomous(){
       aintake_L.move(127);
       driveForward(56);
       pros::delay(200);
-      turn(25);
+      turn(27);
       driveBackward(-60);
       driveBackward(-12);
       driveForward(58);
