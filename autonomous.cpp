@@ -173,7 +173,7 @@ void autonomous(){
       rturn(-67);
       aintake_L.move(-75);
       aintake_R.move(75);
-      driveForward(12);
+      driveForward(9);
       aintake_L.move(0);
       aintake_R.move(0);
       bool keep = aouttake_macro(false,IntegratedEncoder(aouttake));
